@@ -17,6 +17,7 @@ using Microsoft.AspNet.Diagnostics;
 using WEBAPI.Models;
 using Microsoft.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WEBAPI.Middleware.Authentication;
 
 namespace WEBAPI
 {
@@ -108,6 +109,8 @@ namespace WEBAPI
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            //app.UseMiddleware<AuthorizationMiddleware>();
+
             app.UseIISPlatformHandler();
 
             // Register a simple error handler to catch token expiries and change them to a 401, 
@@ -165,6 +168,7 @@ namespace WEBAPI
                 // used, some leeway here could be useful.
                 options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(0);
             });
+            app.UseAuthorization();
 
             app.UseApplicationInsightsRequestTelemetry();
 

@@ -3,43 +3,49 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.Entity;
 
 namespace WEBAPI.Repository
 {
     public class ArticleRepository : IArticleRepository, IDisposable
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         public ArticleRepository(ApplicationDbContext dbcontext)
         {
-            _context = dbcontext;
+            _dbContext = dbcontext;
         }
 
-        public IEnumerable<Article> AllArticle
+        public IEnumerable<Article> AllArticles
         {
             get
             {
-                return _context.Articles;
+                return _dbContext.Articles;
             }
         }
 
-        public void Add(Article item)
+        public async Task<Article> Add(Article _article)
         {
-            throw new NotImplementedException();
+            _dbContext.Articles.Add(_article);
+            await _dbContext.SaveChangesAsync();
+            return _article;
         }
 
-        public bool Delete(int id)
+        public async Task<Article> Delete(int id)
         {
-            throw new NotImplementedException();
+            Article _article = await _dbContext.Articles.FirstOrDefaultAsync(x => x.Id == id);
+            _dbContext.Articles.Remove(_article);
+            await _dbContext.SaveChangesAsync();
+            return _article;
         }
 
-        public Article GetById(int id)
+        public async Task<Article> GetById(int id)
         {
-            throw new NotImplementedException();
+             return await _dbContext.Articles.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Dispose()
         {
-            if (_context != null) _context.Dispose();
+            if (_dbContext != null) _dbContext.Dispose();
         }
     }
 }
