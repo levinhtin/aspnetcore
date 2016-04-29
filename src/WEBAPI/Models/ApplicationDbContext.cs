@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Infrastructure;
 
 namespace WEBAPI.Models
 {
@@ -21,6 +22,5 @@ namespace WEBAPI.Models
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }

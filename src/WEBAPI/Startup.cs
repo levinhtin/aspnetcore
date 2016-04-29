@@ -18,6 +18,7 @@ using WEBAPI.Models;
 using Microsoft.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WEBAPI.Middleware.Authentication;
+using WEBAPI.Repository;
 
 namespace WEBAPI
 {
@@ -89,6 +90,7 @@ namespace WEBAPI
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
             {
                 o.Password.RequireDigit = false;
@@ -101,6 +103,11 @@ namespace WEBAPI
             .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            //services.AddTransient<IRepository<Category>, Repository<Category>>();
+
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<IRepository<Category>, Repository<Category>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

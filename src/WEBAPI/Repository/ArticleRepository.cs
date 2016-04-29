@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
+using System.Threading;
 
 namespace WEBAPI.Repository
 {
@@ -46,6 +47,16 @@ namespace WEBAPI.Repository
         public void Dispose()
         {
             if (_dbContext != null) _dbContext.Dispose();
+        }
+
+        public Task<IEnumerable<Article>> GetAsync(Func<IQueryable<Article>, IQueryable<Article>> queryShaper, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> GetAsync<TResult>(Func<IQueryable<Article>, TResult> queryShaper, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
