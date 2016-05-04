@@ -12,7 +12,7 @@ namespace WEBAPI.Repository
     /// Defines the behavior of a read-only repository of items.
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of item in the repository.</typeparam>
-    //[ContractClass(typeof(IReadOnlyRepositoryContract<>))]
+    [ContractClass(typeof(IReadOnlyRepositoryContract<>))]
     public interface IReadOnlyRepository<T> where T : class
     {
         /// <summary>

@@ -107,7 +107,7 @@ namespace WEBAPI
             //services.AddTransient<IRepository<Category>, Repository<Category>>();
 
             services.AddScoped<IArticleRepository, ArticleRepository>();
-            services.AddScoped<IRepository<Category>, Repository<Category>>();
+            //services.AddScoped<IRepository<Article>, IRepository<Article>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

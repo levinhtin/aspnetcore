@@ -14,6 +14,7 @@ namespace WEBAPI.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private IArticleRepository _repository;
+        //private IRepository<Article> _repository;
         //private IRepository<Category> _repositoryCtg;
         public ValuesController(ApplicationDbContext dbContext, IArticleRepository repository/*, IRepository<Category> repositoryCtg*/)
         {
@@ -23,13 +24,13 @@ namespace WEBAPI.Controllers
         }
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Article>> Get()
         {
             //var c = _repository.AllArticles;
             var test = _dbContext.Articles.ToList();
-            var test2 = _repository.AllArticles;
+            return await _repository.GetAllAsync();
             //var test3 = _repositoryCtg.GetAllAsync();
-            return new string[] { "value1", "value2" };
+            //return test2;
         }
 
         [HttpGet]

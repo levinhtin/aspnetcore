@@ -7,11 +7,8 @@ using System.Threading;
 
 namespace WEBAPI.Repository
 {
-    public interface IArticleRepository: IArticleRepositoryReadOnly
+    public interface IArticleRepository: IRepository<Article>
     {
-        IEnumerable<Article> AllArticles { get; }
-        Task<Article> Add(Article item);
-        Task<Article> GetById(int id);
-        Task<Article> Delete(int id);
+
     }
 }
