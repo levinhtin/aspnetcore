@@ -41,7 +41,7 @@ namespace WEBAPI.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [Route("register")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -59,9 +59,12 @@ namespace WEBAPI.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     //return RedirectToAction(nameof(HomeController.Index), "Home");
-                    return null;
+                    return Ok(new OperationResult<RegisterViewModel>(OperationStatus.Success, "Register Successful", model));
                 }
-                AddErrors(result);
+                else {
+                    AddErrors(result);
+                    return Ok(new OperationResult<string>(OperationStatus.Failure, result.Errors.FirstOrDefault().Code, result.Errors.FirstOrDefault().Description));
+                }
             }
 
             // If we got this far, something failed, redisplay form
@@ -73,7 +76,7 @@ namespace WEBAPI.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [Route("login")]
         public async Task<IActionResult> /*Task<HttpResponseMessage>*/ Login(LoginViewModel model, string returnUrl = null)
         {
             //ViewData["ReturnUrl"] = returnUrl;
@@ -121,7 +124,7 @@ namespace WEBAPI.Controllers
         //
         // POST: /Account/LogOff
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Route("logoff")]
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();

@@ -19,6 +19,7 @@ using Microsoft.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WEBAPI.Middleware.Authentication;
 using WEBAPI.Repository;
+using WEBAPI.Middleware.CustomHeader;
 
 namespace WEBAPI
 {
@@ -186,6 +187,10 @@ namespace WEBAPI
             app.UseStaticFiles();
 
             app.UseMvc();
+
+            // Custom Middleware
+            app.UseCustomHeader();
+            app.UsePing();
         }
 
         // Entry point for the application.

@@ -35,9 +35,10 @@ namespace WEBAPI.Controllers
 
         [HttpGet]
         [Route("all")]
-        public IEnumerable<string> GetAll()
+        public IActionResult GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var result = new string[] { "value1", "value2" };
+            return Ok(result);
         }
 
         // GET api/values/5
