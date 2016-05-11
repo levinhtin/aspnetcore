@@ -71,7 +71,14 @@ namespace WEBAPI.Controllers
             return new ObjectResult(model);
         }
 
-
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("users")]
+        public async Task<IActionResult> Users()
+        {
+            var result = await _userManager.Users.ToListAsync();
+            return Ok(result);
+        }
         //
         // POST: /Account/Login
         [HttpPost]
