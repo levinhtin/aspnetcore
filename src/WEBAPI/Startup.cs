@@ -51,6 +51,7 @@ namespace WEBAPI
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             // *** CHANGE THIS FOR PRODUCTION USE ***
             // Here, we're generating a random key to sign tokens - obviously this means
             // that each time the app is started the key will change, and multiple servers 
@@ -114,8 +115,16 @@ namespace WEBAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseCors(builder =>
+            builder.WithOrigins("*")
+                   .WithMethods("*")
+                   //.WithMethods("GET", "POST")
+                   .AllowAnyHeader()
+            );
 
             //app.UseMiddleware<AuthorizationMiddleware>();
 

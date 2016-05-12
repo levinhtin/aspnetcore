@@ -15,6 +15,8 @@ using System.Web.Http;
 
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Principal;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,15 +29,18 @@ namespace WEBAPI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
+        private readonly TokenAuthOptions _tokenOptions;
 
         public AccountController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
-           ILoggerFactory loggerFactory)
+           ILoggerFactory loggerFactory,
+           TokenAuthOptions tokenOptions)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            this._tokenOptions = tokenOptions;
         }
 
         // POST: /Account/Register
@@ -71,20 +76,12 @@ namespace WEBAPI.Controllers
             return new ObjectResult(model);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("users")]
-        public async Task<IActionResult> Users()
-        {
-            var result = await _userManager.Users.ToListAsync();
-            return Ok(result);
-        }
         //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
-        public async Task<IActionResult> /*Task<HttpResponseMessage>*/ Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> /*Task<HttpResponseMessage>*/ Login(LoginViewModel model)
         {
             //ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -94,10 +91,21 @@ namespace WEBAPI.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    DateTime? expires = DateTime.UtcNow.AddHours(24);
+                    var token = GetToken(model.Email, expires);
+
                     _logger.LogInformation(1, "User logged in.");
                     //return RedirectToLocal(returnUrl);
                     //return Request.CreateResponse(HttpStatusCode.OK, result);
-                    return new ObjectResult(result);
+                    
+                    var loginResult = new OperationResult<AuthenticatedViewModel>(OperationStatus.Success, "authenticated", 
+                        new AuthenticatedViewModel() {
+                            authenticated = true,
+                            entityId = 1,
+                            token = token,
+                            tokenExpires = expires
+                        });
+                    return Ok(loginResult);
 
                 }
                 if (result.RequiresTwoFactor)
@@ -141,6 +149,23 @@ namespace WEBAPI.Controllers
         }
 
         #region Helpers
+        private string GetToken(string user, DateTime? expires)
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            // Here, you should create or look up an identity for the user which is being authenticated.
+            // For now, just creating a simple generic identity.
+            ClaimsIdentity identity = new ClaimsIdentity(new GenericIdentity(user, "TokenAuth"), new[] { new Claim("EntityID", "1", ClaimValueTypes.Integer) });
+
+            var securityToken = handler.CreateToken(
+                issuer: _tokenOptions.Issuer,
+                audience: _tokenOptions.Audience,
+                signingCredentials: _tokenOptions.SigningCredentials,
+                subject: identity,
+                expires: expires
+                );
+            return handler.WriteToken(securityToken);
+        }
 
         private void AddErrors(IdentityResult result)
         {
