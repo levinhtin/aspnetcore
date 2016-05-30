@@ -1,9 +1,9 @@
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
-using Microsoft.Data.Entity.Migrations;
-using Microsoft.Data.Entity.Metadata;
 
-namespace WEBAPI.Migrations
+namespace WEBAPI.Data.Migrations
 {
     public partial class init : Migration
     {

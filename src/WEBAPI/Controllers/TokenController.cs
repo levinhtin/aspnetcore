@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
 using System.IdentityModel.Tokens;
 using System.Security.Claims;
-using Microsoft.AspNet.Authorization;
 using System.Security.Principal;
-using Microsoft.AspNet.Authentication.JwtBearer;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNet.Identity;
 using WEBAPI.Models;
 using System.Threading.Tasks;
 using WEBAPI.ViewModels.Account;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WEBAPI.Controllers
 {
@@ -158,7 +157,7 @@ namespace WEBAPI.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await _userManager.GetUserAsync(HttpContext.User);
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

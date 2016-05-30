@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using WEBAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace WEBAPI.Models
+namespace WEBAPI.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

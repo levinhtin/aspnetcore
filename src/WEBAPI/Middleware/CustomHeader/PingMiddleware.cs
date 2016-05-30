@@ -28,7 +28,7 @@ namespace WEBAPI.Middleware.CustomHeader
             if (headers.ContainsKey(PingMe))
             {
                 var value = headers[PingMe];
-                _logger.LogVerbose($"Pinging {value}");
+                _logger.LogInformation($"Pinging {value}");
 
                 context.Response.Headers[PingBack] = $"Hi {value}";
                 context.Response.StatusCode = (int)HttpStatusCode.Accepted;

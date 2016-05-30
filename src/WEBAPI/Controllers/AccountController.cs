@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Authorization;
 using WEBAPI.ViewModels.Account;
-using Microsoft.AspNet.Identity;
 using WEBAPI.Models;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
-using System.Net;
-using System.Web.Http;
 
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Data.Entity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -177,7 +171,7 @@ namespace WEBAPI.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await _userManager.GetUserAsync(HttpContext.User);
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

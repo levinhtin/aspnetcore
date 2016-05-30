@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Authentication.JwtBearer;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Diagnostics;
-using WEBAPI.Models;
-using Microsoft.Data.Entity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using WEBAPI.Middleware.Authentication;
 using WEBAPI.Repository;
 using WEBAPI.Middleware.CustomHeader;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using WEBAPI.Data;
+using WEBAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WEBAPI
 {
@@ -34,16 +36,21 @@ namespace WEBAPI
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsEnvironment("Development"))
             {
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                builder.AddUserSecrets();
+                
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build().ReloadOnChanged("appsettings.json");
+            Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -75,7 +82,7 @@ namespace WEBAPI
 
             // Save the token options into an instance so they're accessible to the 
             // controller.
-            services.AddInstance<TokenAuthOptions>(tokenOptions);
+            services.AddSingleton<TokenAuthOptions>(tokenOptions);
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and classes to protect.
             services.AddAuthorization(auth =>
@@ -88,17 +95,20 @@ namespace WEBAPI
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            //services.AddEntityFramework()
+            //    .AddSqlServer()
+            //    .AddDbContext<ApplicationDbContext>(options =>
+            //        options.UseSqlServer(Configuration["DefaultConnection"]));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
-                o.Password.RequireNonLetterOrDigit = false; ;
+                o.Password.RequireNonAlphanumeric = false; ;
                 o.Password.RequiredLength = 6;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -113,7 +123,7 @@ namespace WEBAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(Microsoft.AspNet.Builder.IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -128,7 +138,7 @@ namespace WEBAPI
 
             //app.UseMiddleware<AuthorizationMiddleware>();
 
-            app.UseIISPlatformHandler();
+            //app.UseIISPlatformHandler();
 
             // Register a simple error handler to catch token expiries and change them to a 401, 
             // and return all other errors as a 500. This should almost certainly be improved for
@@ -166,24 +176,37 @@ namespace WEBAPI
                 });
             });
 
-            app.UseJwtBearerAuthentication(options =>
+            //app.UseJwtBearerAuthentication(options =>
+            //{
+            //    // Basic settings - signing key to validate with, audience and issuer.
+            //    options.TokenValidationParameters.IssuerSigningKey = key;
+            //    options.TokenValidationParameters.ValidAudience = tokenOptions.Audience;
+            //    options.TokenValidationParameters.ValidIssuer = tokenOptions.Issuer;
+
+            //    // When receiving a token, check that we've signed it.
+            //    options.TokenValidationParameters.ValidateSignature = true;
+
+            //    // When receiving a token, check that it is still valid.
+            //    options.TokenValidationParameters.ValidateLifetime = true;
+
+            //    // This defines the maximum allowable clock skew - i.e. provides a tolerance on the token expiry time 
+            //    // when validating the lifetime. As we're creating the tokens locally and validating them on the same 
+            //    // machines which should have synchronised time, this can be set to zero. Where external tokens are
+            //    // used, some leeway here could be useful.
+            //    options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(0);
+            //});
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
-                // Basic settings - signing key to validate with, audience and issuer.
-                options.TokenValidationParameters.IssuerSigningKey = key;
-                options.TokenValidationParameters.ValidAudience = tokenOptions.Audience;
-                options.TokenValidationParameters.ValidIssuer = tokenOptions.Issuer;
-
-                // When receiving a token, check that we've signed it.
-                options.TokenValidationParameters.ValidateSignature = true;
-
-                // When receiving a token, check that it is still valid.
-                options.TokenValidationParameters.ValidateLifetime = true;
-
-                // This defines the maximum allowable clock skew - i.e. provides a tolerance on the token expiry time 
-                // when validating the lifetime. As we're creating the tokens locally and validating them on the same 
-                // machines which should have synchronised time, this can be set to zero. Where external tokens are
-                // used, some leeway here could be useful.
-                options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(0);
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
+                    IssuerSigningKey = key,
+                    ValidAudience = tokenOptions.Audience,
+                    ValidIssuer = tokenOptions.Issuer,
+                    ClockSkew = TimeSpan.FromMinutes(0)
+                },
+                
             });
             app.UseAuthorization();
 
@@ -203,6 +226,6 @@ namespace WEBAPI
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        //public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

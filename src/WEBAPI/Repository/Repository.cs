@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using WEBAPI.Models;
+using WEBAPI.Data;
 
 namespace WEBAPI.Repository
 {
