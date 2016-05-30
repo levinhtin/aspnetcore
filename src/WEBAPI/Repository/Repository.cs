@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using WEBAPI.Models;
@@ -17,40 +18,44 @@ namespace WEBAPI.Repository
 
         public Repository(ApplicationDbContext dbContext)
         {
-            
             Contract.Requires(dbContext != null);
             this._dbContext = dbContext;
         }
 
-        public abstract Task<IEnumerable<T>> GetAsync(Func<IQueryable<T>, IQueryable<T>> queryShaper, CancellationToken cancellationToken);
-
-
-        public abstract Task<TResult> GetAsync<TResult>(Func<IQueryable<T>, TResult> queryShaper, CancellationToken cancellationToken);
-
-        public virtual void Add(T item)
+        public void Add(T entity)
         {
-            _dbContext.Add(item);
+            throw new NotImplementedException();
         }
 
-        public virtual void Remove(T item)
+        public void AddRange(IEnumerable<T> entities)
         {
-            this._dbContext.Remove(item);
+            throw new NotImplementedException();
         }
 
-        public virtual void Update(T item)
+        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            this._dbContext.Add(item);
+            throw new NotImplementedException();
         }
 
-        public virtual void DiscardChanges()
+        public T Get(int id)
         {
-            this._dbContext.Dispose();
+            //return _dbContext.Set<T>().First(x=>x.);
+            throw new NotImplementedException();
         }
 
-        public virtual Task SaveChangesAsync(CancellationToken cancellationToken)
+        public IEnumerable<T> GetAll()
         {
-            return this._dbContext.SaveChangesAsync();
+            throw new NotImplementedException();
         }
 
+        public void Remove(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
