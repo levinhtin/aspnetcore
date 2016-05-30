@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WEBAPI.Middleware.Authentication;
 
-namespace Microsoft.AspNet.Builder
+namespace Microsoft.AspNetCore.Builder
 {
     public static class AuthorizationAppBuilderExtensions
     {

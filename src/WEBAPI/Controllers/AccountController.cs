@@ -18,23 +18,20 @@ namespace WEBAPI.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class AccountController : Controller
+    public class AccountControlelr : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
-        private readonly TokenAuthOptions _tokenOptions;
 
         public AccountController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
-           ILoggerFactory loggerFactory,
-           TokenAuthOptions tokenOptions)
+           ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            this._tokenOptions = tokenOptions;
         }
 
         // POST: /Account/Register
@@ -143,23 +140,6 @@ namespace WEBAPI.Controllers
         }
 
         #region Helpers
-        private string GetToken(string user, DateTime? expires)
-        {
-            var handler = new JwtSecurityTokenHandler();
-
-            // Here, you should create or look up an identity for the user which is being authenticated.
-            // For now, just creating a simple generic identity.
-            ClaimsIdentity identity = new ClaimsIdentity(new GenericIdentity(user, "TokenAuth"), new[] { new Claim("EntityID", "1", ClaimValueTypes.Integer) });
-
-            var securityToken = handler.CreateToken(
-                issuer: _tokenOptions.Issuer,
-                audience: _tokenOptions.Audience,
-                signingCredentials: _tokenOptions.SigningCredentials,
-                subject: identity,
-                expires: expires
-                );
-            return handler.WriteToken(securityToken);
-        }
 
         private void AddErrors(IdentityResult result)
         {

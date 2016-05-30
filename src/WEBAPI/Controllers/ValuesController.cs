@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WEBAPI.Repository;
+//using WEBAPI.Repository;
 using WEBAPI.Models;
 using WEBAPI.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +14,13 @@ namespace WEBAPI.Controllers
     public class ValuesController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
-        private IArticleRepository _repository;
+        //private IArticleRepository _repository;
         //private IRepository<Article> _repository;
         //private IRepository<Category> _repositoryCtg;
-        public ValuesController(ApplicationDbContext dbContext, IArticleRepository repository/*, IRepository<Category> repositoryCtg*/)
+        public ValuesController(ApplicationDbContext dbContext /*IArticleRepository repository, IRepository<Category> repositoryCtg*/)
         {
             _dbContext = dbContext;
-            _repository = repository;
+            //_repository = repository;
             //_repositoryCtg = repositoryCtg;
         }
         // GET: api/values
@@ -29,9 +29,9 @@ namespace WEBAPI.Controllers
         {
             //var c = _repository.AllArticles;
             var test = _dbContext.Articles.ToList();
-            return await _repository.GetAllAsync();
+            //return await _repository.GetAllAsync();
             //var test3 = _repositoryCtg.GetAllAsync();
-            //return test2;
+            return test;
         }
 
         [HttpGet]

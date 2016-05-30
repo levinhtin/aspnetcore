@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WEBAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using OpenIddict;
+using OpenIddict.Models;
 
 namespace WEBAPI.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : OpenIddictContext<ApplicationUser, Application, ApplicationRole, string>
     {
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Tags> Tags { get; set; }
 
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
