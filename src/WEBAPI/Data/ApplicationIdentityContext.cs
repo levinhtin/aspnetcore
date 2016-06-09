@@ -9,9 +9,9 @@ using WEBAPI.Data.Entities;
 
 namespace WEBAPI.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationIdentityContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationIdentityContext(DbContextOptions<ApplicationIdentityContext> options)
             : base(options)
         {
         }

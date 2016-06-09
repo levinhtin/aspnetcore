@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using WEBAPI.Data;
 
 namespace WEBAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationIdentityContext))]
-    [Migration("00000000000000_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20160609075608_aspnetcore")]
+    partial class aspnetcore
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rc2")
+                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -126,6 +124,82 @@ namespace WEBAPI.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WEBAPI.Data.Entities.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CategoryId");
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<string>("CreatedUserId");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("ModifyUserId");
+
+                    b.Property<string>("Summary");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("WEBAPI.Data.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<string>("CreatedUserId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("ModifyUserId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("WEBAPI.Data.Entities.Tags", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ArticleId");
+
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<string>("CreatedUserId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("ModifyUserId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("WEBAPI.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
@@ -209,6 +283,20 @@ namespace WEBAPI.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WEBAPI.Data.Entities.Article", b =>
+                {
+                    b.HasOne("WEBAPI.Data.Entities.Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("WEBAPI.Data.Entities.Tags", b =>
+                {
+                    b.HasOne("WEBAPI.Data.Entities.Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
                 });
         }
     }

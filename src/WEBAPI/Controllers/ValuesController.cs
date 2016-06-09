@@ -17,7 +17,7 @@ namespace WEBAPI.Controllers
     {
         private IArticleRepository _repository;
 
-        public ValuesController(ApplicationDbContext dbContext, IArticleRepository repository/*, IRepository<Category> repositoryCtg*/)
+        public ValuesController(ApplicationIdentityContext dbContext, IArticleRepository repository/*, IRepository<Category> repositoryCtg*/)
         {
             //_dbContext = dbContext;
             _repository = repository;

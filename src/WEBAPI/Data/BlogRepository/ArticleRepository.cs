@@ -10,8 +10,8 @@ namespace WEBAPI.Data.BlogRepository
 {
     public class ArticleRepository : IArticleRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-        public ArticleRepository(ApplicationDbContext dbcontext)
+        private readonly ApplicationIdentityContext _dbContext;
+        public ArticleRepository(ApplicationIdentityContext dbcontext)
         {
             _dbContext = dbcontext;
         }

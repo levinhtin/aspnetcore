@@ -1,0 +1,11 @@
+﻿version: '2'
+
+services:
+  app:
+    build: .
+    ports:
+    - "5000:5000"
+    volumes:
+    - ../:/app
+    environment: 
+    - ASPNETCORE_SERVER.URLS=http://0.0.0.0:5000

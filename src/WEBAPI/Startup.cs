@@ -13,6 +13,7 @@ using WEBAPI.Data;
 using WEBAPI.Models;
 using WEBAPI.Services;
 using WEBAPI.Data.BlogRepository;
+using Newtonsoft.Json.Serialization;
 
 namespace WEBAPI
 {
@@ -43,19 +44,31 @@ namespace WEBAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Cors service.
+            services.AddCors(options => options
+                .AddPolicy("AllowAll", p => p
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                )
+            );
+
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationIdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<ApplicationIdentityContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
-            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();

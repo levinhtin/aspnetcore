@@ -14,9 +14,9 @@ namespace WEBAPI.Data.Entities.Repository
 
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationIdentityContext _dbContext;
 
-        public Repository(ApplicationDbContext dbContext)
+        public Repository(ApplicationIdentityContext dbContext)
         {
 
             Contract.Requires(dbContext != null);
