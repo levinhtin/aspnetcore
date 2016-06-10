@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspNetCore.Data.Context;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -7,9 +8,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using WEBAPI.Models;
 
-namespace WEBAPI.Data.Entities.Repository
+namespace AspNetCore.Data.Repository
 {
 
     public abstract class Repository<T> : IRepository<T> where T : class

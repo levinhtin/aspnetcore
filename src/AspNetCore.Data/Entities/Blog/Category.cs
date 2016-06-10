@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WEBAPI.Data.Entities
+namespace AspNetCore.Data.Entities.Blog
 {
     public class Category : AbstractModel
     {

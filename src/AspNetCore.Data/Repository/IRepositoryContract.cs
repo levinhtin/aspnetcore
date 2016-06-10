@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WEBAPI.Data.Entities.Repository
+namespace AspNetCore.Data.Repository
 {
     [ContractClassFor(typeof(IRepository<>))]
     internal abstract class IRepositoryContract<T> : IRepository<T> where T : class

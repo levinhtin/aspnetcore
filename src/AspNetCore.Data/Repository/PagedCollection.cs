@@ -6,7 +6,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WEBAPI.Data.Entities.Repository
+namespace AspNetCore.Data.Repository
 {
     /// <summary>
     /// Represents a read-only collection of paged items.

@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WEBAPI.Data.Entities.Repository
+namespace AspNetCore.Data.Repository
 {
     public static class IRepositoryExtensions
     {

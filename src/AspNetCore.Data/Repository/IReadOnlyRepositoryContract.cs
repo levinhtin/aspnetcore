@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WEBAPI.Data.Entities.Repository
+namespace AspNetCore.Data.Repository
 {
     [ContractClassFor(typeof(IReadOnlyRepository<>))]
     internal abstract class IReadOnlyRepositoryContract<T> : IReadOnlyRepository<T> where T : class

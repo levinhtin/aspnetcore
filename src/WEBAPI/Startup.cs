@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WEBAPI.Data;
-using WEBAPI.Models;
+//using WEBAPI.Data;
+//using WEBAPI.Models;
 using WEBAPI.Services;
-using WEBAPI.Data.BlogRepository;
+//using WEBAPI.Data.BlogRepository;
 using Newtonsoft.Json.Serialization;
+using AspNetCore.Data.Models;
+using AspNetCore.Data.Context;
 
 namespace WEBAPI
 {
@@ -68,7 +70,7 @@ namespace WEBAPI
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            services.AddSingleton<IArticleRepository, ArticleRepository>();
+            //services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();

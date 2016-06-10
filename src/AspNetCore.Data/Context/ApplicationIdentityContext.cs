@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WEBAPI.Models;
-using WEBAPI.Data.Entities;
+using AspNetCore.Data.Models;
+using AspNetCore.Data.Entities.Blog;
 
-namespace WEBAPI.Data
+namespace AspNetCore.Data.Context
 {
+
     public class ApplicationIdentityContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationIdentityContext(DbContextOptions<ApplicationIdentityContext> options)
@@ -29,3 +30,4 @@ namespace WEBAPI.Data
         }
     }
 }
+
