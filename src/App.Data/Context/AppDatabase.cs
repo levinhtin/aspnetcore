@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using App.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -9,6 +12,10 @@ namespace App.Data.Context
 {
     public class AppDatabase
     {
+        const string DEFAULT_ADMIN_USER = "Admin";
+        const string DEFAULT_ADMIN_PASSWORD = "123123";
+        const string DEFAULT_ADMINISTRATOR_ROLE = "Administrator";
+
         public static async void InitializeDatabase(IServiceProvider serviceProvider, bool isProduction)
         {
 
@@ -56,12 +63,12 @@ namespace App.Data.Context
                 }
 
                 // Ensure the admin user exists
-                //var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                //var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
                 //if (await userManager.FindByNameAsync(DEFAULT_ADMIN_USER) == null)
                 //{
                 //    // If not create it
-                //    var adminUser = new IdentityUser { UserName = DEFAULT_ADMIN_USER };
+                //    var adminUser = new ApplicationUser { UserName = DEFAULT_ADMIN_USER };
                 //    var result = await userManager.CreateAsync(adminUser, DEFAULT_ADMIN_PASSWORD);
 
                 //    // TODO: Gonz introduce correct logging!
