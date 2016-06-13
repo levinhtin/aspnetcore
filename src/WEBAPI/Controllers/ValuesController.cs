@@ -4,13 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AspNetCore.Data.Repository.Blog;
-using AspNetCore.Data.Entities.Blog;
-using AspNetCore.Data.Repository;
-//using WEBAPI.Data.BlogRepository;
-//using WEBAPI.Data;
-//using WEBAPI.Data.Entities;
-//using WEBAPI.Data.Entities.Repository;
+using App.Data.Repository.Blog;
+using App.Data.Entities.Blog;
+using App.Data.Repository;
 
 namespace WEBAPI.Controllers
 {

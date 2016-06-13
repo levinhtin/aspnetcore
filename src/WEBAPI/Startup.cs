@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,9 +12,11 @@ using Microsoft.Extensions.Logging;
 using WEBAPI.Services;
 //using WEBAPI.Data.BlogRepository;
 using Newtonsoft.Json.Serialization;
-using AspNetCore.Data.Models;
-using AspNetCore.Data.Context;
-using AspNetCore.Data.Repository.Blog;
+using App.Data.Repository.Blog;
+using App.Data.Context;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using App.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WEBAPI
 {
@@ -59,11 +59,14 @@ namespace WEBAPI
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationIdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationIdentityContext>()
+                .AddEntityFrameworkStores<App.Data.Context.ApplicationIdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc().AddJsonOptions(options =>
@@ -74,6 +77,7 @@ namespace WEBAPI
             //services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
             services.AddDbContext<ApplicationIdentityContext>();
+            services.AddDbContext<AppDbContext>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IArticleRepository, ArticleRepository>();
@@ -86,6 +90,11 @@ namespace WEBAPI
             loggerFactory.AddDebug();
 
             app.UseApplicationInsightsRequestTelemetry();
+            // Before we setup the pipeline, get the database up
+            //AppDatabase.InitializeDatabase(app.ApplicationServices,
+            //    isProduction: env.IsProduction());
+            AppDatabase.EnsureIdentityDatabaseExists(app.ApplicationServices,
+                isProduction: env.IsProduction());
 
             if (env.IsDevelopment())
             {

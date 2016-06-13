@@ -14,6 +14,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WEBAPI", "src\WEBAPI\WEBAPI
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AspNetCore.Data", "src\AspNetCore.Data\AspNetCore.Data.xproj", "{4DFD777E-0112-42D8-8379-A671DE4B975A}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "App.Data", "src\App.Data\App.Data.xproj", "{AA35BDAE-4F78-4455-8893-74517FE85531}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{4DFD777E-0112-42D8-8379-A671DE4B975A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DFD777E-0112-42D8-8379-A671DE4B975A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DFD777E-0112-42D8-8379-A671DE4B975A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA35BDAE-4F78-4455-8893-74517FE85531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA35BDAE-4F78-4455-8893-74517FE85531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA35BDAE-4F78-4455-8893-74517FE85531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA35BDAE-4F78-4455-8893-74517FE85531}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,5 +41,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{93631151-6422-440E-9EEF-23A14B3E6897} = {B19D8F58-1796-4782-97F2-B8AA9C80DD5A}
 		{4DFD777E-0112-42D8-8379-A671DE4B975A} = {B19D8F58-1796-4782-97F2-B8AA9C80DD5A}
+		{AA35BDAE-4F78-4455-8893-74517FE85531} = {B19D8F58-1796-4782-97F2-B8AA9C80DD5A}
 	EndGlobalSection
 EndGlobal
