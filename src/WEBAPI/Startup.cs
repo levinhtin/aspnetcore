@@ -16,6 +16,7 @@ using WEBAPI.Services;
 using Newtonsoft.Json.Serialization;
 using AspNetCore.Data.Models;
 using AspNetCore.Data.Context;
+using AspNetCore.Data.Repository.Blog;
 
 namespace WEBAPI
 {
@@ -72,8 +73,10 @@ namespace WEBAPI
 
             //services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
+            services.AddDbContext<ApplicationIdentityContext>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddSingleton<IArticleRepository, ArticleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
