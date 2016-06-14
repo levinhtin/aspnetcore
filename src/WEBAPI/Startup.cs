@@ -59,14 +59,24 @@ namespace WEBAPI
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<AppDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
-            services.AddDbContext<ApplicationIdentityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<ApplicationContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<App.Data.Context.ApplicationIdentityContext>()
+            //services.AddDbContext<AppDbContext>();
+            services.AddDbContext<ApplicationContext>();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+            {
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 6;
+            })
+                .AddEntityFrameworkStores<App.Data.Context.ApplicationContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc().AddJsonOptions(options =>
@@ -76,8 +86,6 @@ namespace WEBAPI
 
             //services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
-            services.AddDbContext<ApplicationIdentityContext>();
-            services.AddDbContext<AppDbContext>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IArticleRepository, ArticleRepository>();

@@ -11,8 +11,8 @@ namespace App.Data.Repository.Blog
 {
     public class ArticleRepository : IArticleRepository
     {
-        private readonly AppDbContext _dbContext;
-        public ArticleRepository(AppDbContext dbcontext)
+        private readonly ApplicationContext _dbContext;
+        public ArticleRepository(ApplicationContext dbcontext)
         {
             _dbContext = dbcontext;
         }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using App.Data.Repository.Blog;
 using App.Data.Entities.Blog;
 using App.Data.Repository;
+using Microsoft.AspNetCore.Identity;
+using App.Data.Models;
 
 namespace WEBAPI.Controllers
 {
@@ -15,10 +17,11 @@ namespace WEBAPI.Controllers
     public class ValuesController : Controller
     {
         private IArticleRepository _repository;
-
-        public ValuesController(IArticleRepository repository/*, IRepository<Category> repositoryCtg*/)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ValuesController(IArticleRepository repository, UserManager<ApplicationUser> userManager /*, IRepository<Category> repositoryCtg*/)
         {
             //_dbContext = dbContext;
+            _userManager = userManager;
             _repository = repository;
             //_repositoryCtg = repositoryCtg;
         }
@@ -28,6 +31,7 @@ namespace WEBAPI.Controllers
         {
             //var c = _repository.AllArticles;
             //var test = _dbContext.Articles.ToList();
+            var admin = await _userManager.FindByNameAsync("Admin");
             return await _repository.GetAllAsync();
             //var test3 = _repositoryCtg.GetAllAsync();
             //return test2;

@@ -49,8 +49,8 @@ namespace App.Data.Context
         }
         public static async void EnsureIdentityDatabaseExists(IServiceProvider serviceProvider, bool isProduction)
         {
-            using (var identityContext = new ApplicationIdentityContext(
-                serviceProvider.GetRequiredService<DbContextOptions<ApplicationIdentityContext>>()))
+            using (var identityContext = new ApplicationContext(
+                serviceProvider.GetRequiredService<DbContextOptions<ApplicationContext>>()))
             {
                 // Ensure the identity tables are created and up-to-date
                 if (isProduction)
@@ -63,39 +63,39 @@ namespace App.Data.Context
                 }
 
                 // Ensure the admin user exists
-                //var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                //if (await userManager.FindByNameAsync(DEFAULT_ADMIN_USER) == null)
-                //{
-                //    // If not create it
-                //    var adminUser = new ApplicationUser { UserName = DEFAULT_ADMIN_USER };
-                //    var result = await userManager.CreateAsync(adminUser, DEFAULT_ADMIN_PASSWORD);
+                if (await userManager.FindByNameAsync(DEFAULT_ADMIN_USER) == null)
+                {
+                    // If not create it
+                    var adminUser = new ApplicationUser { UserName = DEFAULT_ADMIN_USER };
+                    var result = await userManager.CreateAsync(adminUser, DEFAULT_ADMIN_PASSWORD);
 
-                //    // TODO: Gonz introduce correct logging!
-                //    //if (!result.Succeeded)
-                //    //{
-                //    //	Console.WriteLine("Could not create default 'Admin' user");
-                //    //	foreach (var error in result.Errors)
-                //    //	{
-                //    //		Console.WriteLine($"{error.Code}: {error.Description}");
-                //    //	}
-                //    //}
-                //};
+                    // TODO: Gonz introduce correct logging!
+                    //if (!result.Succeeded)
+                    //{
+                    //	Console.WriteLine("Could not create default 'Admin' user");
+                    //	foreach (var error in result.Errors)
+                    //	{
+                    //		Console.WriteLine($"{error.Code}: {error.Description}");
+                    //	}
+                    //}
+                };
 
-                //// Ensure the administrators role exists
-                //var roleManger = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                //if (await roleManger.FindByNameAsync(DEFAULT_ADMINISTRATOR_ROLE) == null)
-                //{
-                //    // If not create it
-                //    var administratorsRole = new IdentityRole { Name = DEFAULT_ADMINISTRATOR_ROLE };
-                //    var result = await roleManger.CreateAsync(administratorsRole);
+                // Ensure the administrators role exists
+                var roleManger = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                if (await roleManger.FindByNameAsync(DEFAULT_ADMINISTRATOR_ROLE) == null)
+                {
+                    // If not create it
+                    var administratorsRole = new IdentityRole { Name = DEFAULT_ADMINISTRATOR_ROLE };
+                    var result = await roleManger.CreateAsync(administratorsRole);
 
-                //    // Add the admin user to the new role
-                //    var adminUser = await userManager.FindByNameAsync(DEFAULT_ADMIN_USER);
-                //    await userManager.AddToRoleAsync(adminUser, DEFAULT_ADMINISTRATOR_ROLE);
+                    // Add the admin user to the new role
+                    var adminUser = await userManager.FindByNameAsync(DEFAULT_ADMIN_USER);
+                    await userManager.AddToRoleAsync(adminUser, DEFAULT_ADMINISTRATOR_ROLE);
 
-                //    // TODO: Gonz introduce correct logging!
-                //}
+                    // TODO: Gonz introduce correct logging!
+                }
             }
         }
     }
