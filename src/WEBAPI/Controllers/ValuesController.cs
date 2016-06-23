@@ -10,10 +10,13 @@ using App.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using App.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.SwaggerGen.Annotations;
 
 namespace WEBAPI.Controllers
 {
-    
+    /// <summary>
+    /// 
+    /// </summary>
     [Produces("application/json")]
     [Route("api/[Controller]")]
     public class ValuesController : Controller
@@ -21,6 +24,13 @@ namespace WEBAPI.Controllers
         private IArticleRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
         public ValuesController(IArticleRepository repository, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager /*, IRepository<Category> repositoryCtg*/)
         {
             //_dbContext = dbContext;
@@ -29,9 +39,15 @@ namespace WEBAPI.Controllers
             _repository = repository;
             //_repositoryCtg = repositoryCtg;
         }
-        //// GET: api/values
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
+        [Produces(typeof(Article))]
+        [SwaggerResponse(System.Net.HttpStatusCode.OK, Type = typeof(Article))]
         public async Task<IEnumerable<Article>> Get()
         {
             try

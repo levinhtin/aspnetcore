@@ -7,31 +7,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-//using WEBAPI.Data;
-//using WEBAPI.Models;
 using WEBAPI.Services;
-//using WEBAPI.Data.BlogRepository;
-using Newtonsoft.Json.Serialization;
 using App.Data.Repository.Blog;
 using App.Data.Context;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using App.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using WEBAPI.Sercurity;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using WEBAPI.Middleware;
+using Swashbuckle.SwaggerGen.Generator;
+using WEBAPI.Filters;
 
 namespace WEBAPI
 {
     public partial class Startup
     {
-
+        private readonly string pathToDoc = @"C:\Users\TinLVV\Documents\dev\ASPNETCORE\src\WEBAPI\bin\Debug\netcoreapp1.0\WEBAPI.xml";
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -98,6 +85,21 @@ namespace WEBAPI
             //    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             //});
 
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "ASP.NET CORE",
+                    Description = "An API API With Swagger for RC2",
+                    TermsOfService = "None",
+                });
+                options.IncludeXmlComments(pathToDoc);
+                options.DescribeAllEnumsAsStrings();
+                options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+            });
+
             services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -106,6 +108,12 @@ namespace WEBAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -176,6 +184,9 @@ namespace WEBAPI
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc();
+
+            app.UseSwaggerGen();
+            app.UseSwaggerUi();
         }
     }
 }

@@ -40,6 +40,7 @@
     },
     "AspNet.Security.OAuth.Validation": "1.0.0-alpha1-*",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0-rc2-final",
+    "Swashbuckle": "6.0.0-beta9",
     "App.Data": "1.0.0-*"
   },
 
@@ -84,7 +85,8 @@
 
   "buildOptions": {
     "emitEntryPoint": true,
-    "preserveCompilationContext": true
+    "preserveCompilationContext": true,
+    "xmlDoc": true
   },
 
   "runtimeOptions": {
