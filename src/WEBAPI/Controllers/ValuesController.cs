@@ -67,5 +67,19 @@ namespace WEBAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        [Produces(typeof(Article))]
+        [SwaggerResponse(System.Net.HttpStatusCode.OK, Type = typeof(Article))]
+        public async Task<IActionResult> Post(Article model)
+        {
+            return Ok(model);
+        }
+
     }
 }

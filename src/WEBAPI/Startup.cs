@@ -13,6 +13,7 @@ using App.Data.Context;
 using App.Data.Models;
 using Swashbuckle.SwaggerGen.Generator;
 using WEBAPI.Filters;
+using Newtonsoft.Json.Serialization;
 
 namespace WEBAPI
 {
@@ -79,11 +80,11 @@ namespace WEBAPI
             .AddEntityFrameworkStores<App.Data.Context.ApplicationContext>()
             .AddDefaultTokenProviders();
 
-            services.AddMvc();
-            //services.AddMvc().AddJsonOptions(options =>
-            //{
-            //    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            //});
+            //services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
