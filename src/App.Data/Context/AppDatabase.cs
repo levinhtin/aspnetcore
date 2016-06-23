@@ -83,11 +83,11 @@ namespace App.Data.Context
                 };
 
                 // Ensure the administrators role exists
-                var roleManger = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManger = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
                 if (await roleManger.FindByNameAsync(DEFAULT_ADMINISTRATOR_ROLE) == null)
                 {
                     // If not create it
-                    var administratorsRole = new IdentityRole { Name = DEFAULT_ADMINISTRATOR_ROLE };
+                    var administratorsRole = new ApplicationRole { Name = DEFAULT_ADMINISTRATOR_ROLE };
                     var result = await roleManger.CreateAsync(administratorsRole);
 
                     // Add the admin user to the new role

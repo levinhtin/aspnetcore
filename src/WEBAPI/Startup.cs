@@ -17,11 +17,21 @@ using App.Data.Context;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using App.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using WEBAPI.Sercurity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using WEBAPI.Middleware;
 
 namespace WEBAPI
 {
-    public class Startup
+    public partial class Startup
     {
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -68,23 +78,27 @@ namespace WEBAPI
             //services.AddDbContext<AppDbContext>();
             services.AddDbContext<ApplicationContext>();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
+                o.SignIn.RequireConfirmedEmail = false;
+                o.SignIn.RequireConfirmedPhoneNumber = false;
+                o.Lockout.AllowedForNewUsers = true;
             })
-                .AddEntityFrameworkStores<App.Data.Context.ApplicationContext>()
-                .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<App.Data.Context.ApplicationContext>()
+            .AddDefaultTokenProviders();
 
-            services.AddMvc().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            services.AddMvc();
+            //services.AddMvc().AddJsonOptions(options =>
+            //{
+            //    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //});
 
-            //services.AddSingleton<IArticleRepository, ArticleRepository>();
+            services.AddSingleton<IArticleRepository, ArticleRepository>();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -96,6 +110,41 @@ namespace WEBAPI
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            //app.UseExceptionHandler(appBuilder =>
+            //{
+            //    appBuilder.Use(async (context, next) =>
+            //    {
+            //        var error = context.Features[typeof(IExceptionHandlerFeature)] as IExceptionHandlerFeature;
+            //        // This should be much more intelligent - at the moment only expired 
+            //        // security tokens are caught - might be worth checking other possible 
+            //        // exceptions such as an invalid signature.
+            //        if (error != null && error.Error is SecurityTokenExpiredException)
+            //        {
+            //            context.Response.StatusCode = 401;
+            //            // What you choose to return here is up to you, in this case a simple 
+            //            // bit of JSON to say you're no longer authenticated.
+            //            context.Response.ContentType = "application/json";
+            //            await context.Response.WriteAsync(
+            //                JsonConvert.SerializeObject(
+            //                    new { authenticated = false, tokenExpired = true }));
+            //        }
+            //        else if (error != null && error.Error != null)
+            //        {
+            //            context.Response.StatusCode = 500;
+            //            context.Response.ContentType = "application/json";
+            //            // TODO: Shouldn't pass the exception message straight out, change this.
+            //            await context.Response.WriteAsync(
+            //                JsonConvert.SerializeObject
+            //                (new { success = false, error = error.Error.Message }));
+            //        }
+            //        // We're not trying to handle anything else so just let the default 
+            //        // handler handle.
+            //        else await next();
+            //    });
+            //});
+
+            //app.UseAuthorization();
 
             app.UseApplicationInsightsRequestTelemetry();
             // Before we setup the pipeline, get the database up
@@ -115,11 +164,14 @@ namespace WEBAPI
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            //app.UseIdentity();
+
+            ConfigureAuth(app);
+
             app.UseApplicationInsightsExceptionTelemetry();
 
-            app.UseStaticFiles();
-
-            app.UseIdentity();
+            //app.UseAuthorization();
+            //app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 

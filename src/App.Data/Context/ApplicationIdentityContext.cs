@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
 using Microsoft.EntityFrameworkCore;
 using App.Data.Models;
 using App.Data.Entities.Blog;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace App.Data.Context
 {
-
-    public class ApplicationContext : IdentityDbContext<ApplicationUser>
+    //public class ApplicationDbContext : OpenIddictContext<ApplicationUser>
+    //{
+    //    public ApplicationDbContext(DbContextOptions options)
+    //        : base(options)
+    //    {
+    //    }
+    //}
+    public class ApplicationContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)

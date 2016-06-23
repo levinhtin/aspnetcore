@@ -9,32 +9,46 @@ using App.Data.Entities.Blog;
 using App.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using App.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WEBAPI.Controllers
 {
+    
     [Produces("application/json")]
     [Route("api/[Controller]")]
     public class ValuesController : Controller
     {
         private IArticleRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ValuesController(IArticleRepository repository, UserManager<ApplicationUser> userManager /*, IRepository<Category> repositoryCtg*/)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public ValuesController(IArticleRepository repository, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager /*, IRepository<Category> repositoryCtg*/)
         {
             //_dbContext = dbContext;
             _userManager = userManager;
+            _signInManager = signInManager;
             _repository = repository;
             //_repositoryCtg = repositoryCtg;
         }
         //// GET: api/values
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<Article>> Get()
         {
-            //var c = _repository.AllArticles;
-            //var test = _dbContext.Articles.ToList();
-            var admin = await _userManager.FindByNameAsync("Admin");
-            return await _repository.GetAllAsync();
-            //var test3 = _repositoryCtg.GetAllAsync();
-            //return test2;
+            try
+            {
+                //var result = await _signInManager.PasswordSignInAsync("levinhtin@gmail.com", "123123", true, true);
+                //var c = _repository.AllArticles;
+                //var test = _dbContext.Articles.ToList();
+                var admin = await _userManager.FindByNameAsync("Admin");
+                return await _repository.GetAllAsync();
+                //var test3 = _repositoryCtg.GetAllAsync();
+                //return test2;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
     }
