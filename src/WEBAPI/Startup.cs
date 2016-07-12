@@ -11,15 +11,16 @@ using WEBAPI.Services;
 using App.Data.Repository.Blog;
 using App.Data.Context;
 using App.Data.Models;
-using Swashbuckle.SwaggerGen.Generator;
 using WEBAPI.Filters;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.Swagger.Model;
+using Swashbuckle.SwaggerGen.Generator;
 
 namespace WEBAPI
 {
     public partial class Startup
     {
-        private readonly string pathToDoc = @"C:\Users\TinLVV\Documents\dev\ASPNETCORE\src\WEBAPI\bin\Debug\netcoreapp1.0\WEBAPI.xml";
+        //private readonly string pathToDoc = @"C:\Users\TinLVV\Documents\dev\ASPNETCORE\src\WEBAPI\bin\Debug\netcoreapp1.0\WEBAPI.xml";
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -86,6 +87,7 @@ namespace WEBAPI
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
+            var pathToDoc = Configuration["Swagger:Path"];
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
             {
@@ -186,7 +188,7 @@ namespace WEBAPI
 
             app.UseMvc();
 
-            app.UseSwaggerGen();
+            app.UseSwagger();
             app.UseSwaggerUi();
         }
     }

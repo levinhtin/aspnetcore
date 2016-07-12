@@ -3,6 +3,7 @@ using Swashbuckle.SwaggerGen.Generator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.Swagger.Model;
 
 namespace WEBAPI.Filters
 {
