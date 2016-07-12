@@ -28,6 +28,7 @@ namespace App.Data.Repository
     [ContractClass(typeof(IRepositoryContract<>))]
     public interface IRepository<T> : IReadOnlyRepository<T> where T : class
     {
+        T GetByPrimaryKey(int id);
 
         void Add(T item);
 

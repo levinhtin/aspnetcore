@@ -104,7 +104,7 @@ namespace WEBAPI
                 {
                     Version = "v1",
                     Title = "ASP.NET CORE",
-                    Description = "An API API With Swagger for RC2",
+                    Description = "An API With Swagger for RC2",
                     TermsOfService = "None",
                 });
                 options.IncludeXmlComments(pathToDoc);
@@ -113,6 +113,8 @@ namespace WEBAPI
             });
 
             services.AddSingleton<IArticleRepository, ArticleRepository>();
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<ITagsRepository, TagsRepository>();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();

@@ -53,5 +53,9 @@ namespace App.Data.Repository
             return this._dbContext.SaveChangesAsync();
         }
 
+        public T GetByPrimaryKey(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

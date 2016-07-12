@@ -1,23 +1,23 @@
-﻿using App.Data.Context;
-using App.Data.Entities.Blog;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Data.Entities.Blog;
+using App.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Data.Repository.Blog
 {
-    public class ArticleRepository : IArticleRepository
+    public class TagsRepository : ITagsRepository
     {
         private readonly ApplicationContext _dbContext;
-        public ArticleRepository(ApplicationContext dbcontext)
+        public TagsRepository(ApplicationContext dbcontext)
         {
             _dbContext = dbcontext;
         }
 
-        public void Add(Article item)
+        public void Add(Tags item)
         {
             throw new NotImplementedException();
         }
@@ -27,26 +27,26 @@ namespace App.Data.Repository.Blog
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Article>> GetAsync(Func<IQueryable<Article>, IQueryable<Article>> queryShaper, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Tags>> GetAsync(Func<IQueryable<Tags>, IQueryable<Tags>> queryShaper, CancellationToken cancellationToken)
         {
-            var query = queryShaper(_dbContext.Articles);
+            var query = queryShaper(_dbContext.Tags);
             return await query.ToArrayAsync(cancellationToken);
         }
 
-        public async Task<TResult> GetAsync<TResult>(Func<IQueryable<Article>, TResult> queryShaper, CancellationToken cancellationToken)
+        public async Task<TResult> GetAsync<TResult>(Func<IQueryable<Tags>, TResult> queryShaper, CancellationToken cancellationToken)
         {
-            var set = _dbContext.Articles;
+            var set = _dbContext.Tags;
             var query = queryShaper;
             var factory = Task<TResult>.Factory;
             return await factory.StartNew(() => query(set), cancellationToken);
         }
 
-        public Article GetByPrimaryKey(int id)
+        public Tags GetByPrimaryKey(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Article item)
+        public void Remove(Tags item)
         {
             throw new NotImplementedException();
         }
@@ -56,7 +56,7 @@ namespace App.Data.Repository.Blog
             throw new NotImplementedException();
         }
 
-        public void Update(Article item)
+        public void Update(Tags item)
         {
             throw new NotImplementedException();
         }

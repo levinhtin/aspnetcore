@@ -52,6 +52,11 @@ namespace App.Data.Repository
             return null;
         }
 
+        public T GetByPrimaryKey(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }
