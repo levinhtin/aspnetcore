@@ -20,7 +20,10 @@ namespace WEBAPI
 {
     public partial class Startup
     {
-        //private readonly string pathToDoc = @"C:\Users\TinLVV\Documents\dev\ASPNETCORE\src\WEBAPI\bin\Debug\netcoreapp1.0\WEBAPI.xml";
+        /// <summary>
+        /// Constructor function
+        /// </summary>
+        /// <param name="env"></param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -41,9 +44,15 @@ namespace WEBAPI
             Configuration = builder.Build();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Cors service.
