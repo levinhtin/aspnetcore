@@ -15,6 +15,7 @@ using WEBAPI.Filters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.Swagger.Model;
 using Swashbuckle.SwaggerGen.Generator;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace WEBAPI
 {
@@ -96,7 +97,9 @@ namespace WEBAPI
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            var pathToDoc = Configuration["Swagger:Path"];
+            var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+            var xmlPath = System.IO.Path.Combine(basePath, Configuration["Swagger:Path"]);
+
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
             {
@@ -107,7 +110,7 @@ namespace WEBAPI
                     Description = "An API API With Swagger for RC2",
                     TermsOfService = "None",
                 });
-                options.IncludeXmlComments(pathToDoc);
+                options.IncludeXmlComments(xmlPath);
                 options.DescribeAllEnumsAsStrings();
                 options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
             });
