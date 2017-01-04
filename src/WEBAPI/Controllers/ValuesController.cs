@@ -45,7 +45,7 @@ namespace WEBAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
+        [Authorize] 
         [Produces(typeof(Article))]
         [SwaggerResponse(System.Net.HttpStatusCode.OK, Type = typeof(Article))]
         public async Task<IEnumerable<Article>> Get()
