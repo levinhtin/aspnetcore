@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +10,6 @@ using App.Data.Models;
 using WEBAPI.Filters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Generator;
 using Microsoft.Extensions.PlatformAbstractions;
 
 namespace WEBAPI
