@@ -30,6 +30,14 @@ namespace WEBAPI.Providers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="next"></param>
+        /// <param name="options"></param>
+        /// <param name="userManager"></param>
+        /// <param name="passwordHasher"></param>
+        /// <param name="loggerFactory"></param>
         public TokenProviderMiddleware(
             RequestDelegate next,
             IOptions<TokenProviderOptions> options,
@@ -53,6 +61,11 @@ namespace WEBAPI.Providers
             };
         }
 
+        /// <summary>
+        /// Invoke
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public Task Invoke(HttpContext context)
         {
             // If the request path doesn't match, skip
