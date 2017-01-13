@@ -28,6 +28,7 @@ namespace WEBAPI.Providers
         private readonly ILogger _logger;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
 
         /// <summary>
@@ -36,22 +37,25 @@ namespace WEBAPI.Providers
         /// <param name="next"></param>
         /// <param name="options"></param>
         /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
         /// <param name="passwordHasher"></param>
         /// <param name="loggerFactory"></param>
         public TokenProviderMiddleware(
             RequestDelegate next,
             IOptions<TokenProviderOptions> options,
             UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IPasswordHasher<ApplicationUser> passwordHasher,
             ILoggerFactory loggerFactory)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<TokenProviderMiddleware>();
             _userManager = userManager;
+            _signInManager = signInManager;
             _passwordHasher = passwordHasher;
 
             _options = options.Value;
-            _options.IdentityResolver = GetIdentity;
+            //_options.IdentityResolver = GetIdentity;
 
             ThrowIfInvalidOptions(_options);
 
@@ -91,11 +95,11 @@ namespace WEBAPI.Providers
         {
             try
             {
-                var username = context.Request.Form["username"];
-                var password = context.Request.Form["password"];
+                var username = context.Request.Form["username"].ToString();
+                var password = context.Request.Form["password"].ToString();
 
-                var identity = await _options.IdentityResolver(username, password);
-
+                //var identity = await _options.IdentityResolver(username, password);
+                var identity = await GetIdentity(username, password);
                 if (identity == null)
                 {
                     context.Response.StatusCode = 400;
@@ -141,14 +145,29 @@ namespace WEBAPI.Providers
 
         private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var user = await _userManager.FindByNameAsync(username);
-            var passwordValid = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
-            // Don't do this in production, obviously!
-            if (passwordValid == PasswordVerificationResult.Success)
-            {
-                return await Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { }));
-            }
+            //var user = await _userManager.FindByNameAsync(username);
+            //var passwordValid = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            //// Don't do this in production, obviously!
+            //if (passwordValid == PasswordVerificationResult.Success)
+            //{
+            //    var claims = await _userManager.GetClaimsAsync(user);
+            //    return await Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), claims));
+            //}
 
+            //// Credentials are invalid, or account doesn't exist
+            //return await Task.FromResult<ClaimsIdentity>(null);
+
+            //var user1 = await _userManager.FindByEmailAsync(username);
+            //var password1 = await _userManager.CheckPasswordAsync(user1, password);
+            //var cansignin = await _signInManager.CanSignInAsync(user1);
+
+            var result = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(username);
+                var claims = await _userManager.GetClaimsAsync(user);
+                return await Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), claims));
+            }
             // Credentials are invalid, or account doesn't exist
             return await Task.FromResult<ClaimsIdentity>(null);
         }
@@ -177,7 +196,7 @@ namespace WEBAPI.Providers
 
             if (options.IdentityResolver == null)
             {
-                throw new ArgumentNullException(nameof(TokenProviderOptions.IdentityResolver));
+                //throw new ArgumentNullException(nameof(TokenProviderOptions.IdentityResolver));
             }
 
             if (options.SigningCredentials == null)

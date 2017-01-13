@@ -81,5 +81,16 @@ namespace WEBAPI.Controllers
             return Ok(model);
         }
 
+        [HttpGet("claims")]
+        [Authorize(Roles = "Manager")]
+        public IActionResult Claims()
+        {
+            return Ok(User.Claims.Select(c =>
+                        new
+                        {
+                            Type = c.Type,
+                            Value = c.Value
+                        }));
+        }
     }
 }

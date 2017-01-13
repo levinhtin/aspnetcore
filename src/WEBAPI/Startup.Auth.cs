@@ -23,7 +23,7 @@ namespace WEBAPI
 
             app.UseSimpleTokenProvider(new TokenProviderOptions
             {
-                Path = "/token",
+                Path = "/authentication",
                 Audience = "ExampleAudience",
                 Issuer = "ExampleIssuer",
                 SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)

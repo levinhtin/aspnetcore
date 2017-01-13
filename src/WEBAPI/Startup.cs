@@ -181,7 +181,7 @@ namespace WEBAPI
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            //app.UseIdentity();
+            app.UseIdentity();
 
             ConfigureAuth(app);
 
@@ -192,7 +192,14 @@ namespace WEBAPI
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
-            app.UseMvc();
+            app.UseMvc(config =>
+            {
+                config.MapRoute(
+                    name: "Default",
+                    template: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" }
+                    );
+            });
 
             app.UseSwagger();
             app.UseSwaggerUi();

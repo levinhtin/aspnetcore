@@ -12,7 +12,8 @@ namespace App.Data.Context
 {
     public class AppDatabase
     {
-        const string DEFAULT_ADMIN_USER = "Admin";
+        const string DEFAULT_ADMIN_USER = "admin";
+        const string DEFAULT_ADMIN_EMAIL = "levinhtin@gmail.com";
         const string DEFAULT_ADMIN_PASSWORD = "123123";
         const string DEFAULT_ADMINISTRATOR_ROLE = "Administrator";
 
@@ -65,10 +66,10 @@ namespace App.Data.Context
                 // Ensure the admin user exists
                 var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                if (await userManager.FindByNameAsync(DEFAULT_ADMIN_USER) == null)
+                if (await userManager.FindByNameAsync(DEFAULT_ADMIN_EMAIL) == null)
                 {
                     // If not create it
-                    var adminUser = new ApplicationUser { UserName = DEFAULT_ADMIN_USER };
+                    var adminUser = new ApplicationUser { UserName = DEFAULT_ADMIN_EMAIL, Email = DEFAULT_ADMIN_EMAIL, EmailConfirmed = true };
                     var result = await userManager.CreateAsync(adminUser, DEFAULT_ADMIN_PASSWORD);
 
                     // TODO: Gonz introduce correct logging!
@@ -91,7 +92,7 @@ namespace App.Data.Context
                     var result = await roleManger.CreateAsync(administratorsRole);
 
                     // Add the admin user to the new role
-                    var adminUser = await userManager.FindByNameAsync(DEFAULT_ADMIN_USER);
+                    var adminUser = await userManager.FindByNameAsync(DEFAULT_ADMIN_EMAIL);
                     await userManager.AddToRoleAsync(adminUser, DEFAULT_ADMINISTRATOR_ROLE);
 
                     // TODO: Gonz introduce correct logging!
