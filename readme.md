@@ -15,5 +15,5 @@ dotnet run --server.urls http://0.0.0.0:81 --ASPNET_ENV Development
 ```command
 dotnet restore
 dotnet build
-dotnet watch run --environment "Development"
+dotnet watch run --environment "Development" --server.urls "http://localhost:7000"
 ```

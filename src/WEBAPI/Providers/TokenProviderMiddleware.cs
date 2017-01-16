@@ -95,8 +95,8 @@ namespace WEBAPI.Providers
         {
             try
             {
-                var username = context.Request.Form["username"].ToString();
-                var password = context.Request.Form["password"].ToString();
+                var username = context.Request.Form["username"];
+                var password = context.Request.Form["password"];
 
                 //var identity = await _options.IdentityResolver(username, password);
                 var identity = await GetIdentity(username, password);

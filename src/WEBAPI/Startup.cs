@@ -53,7 +53,7 @@ namespace WEBAPI
         {
             // Add Cors service.
             services.AddCors(options => options
-                .AddPolicy("AllowAll", p => p
+                .AddPolicy("CorsPolicy", p => p
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
@@ -127,6 +127,8 @@ namespace WEBAPI
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseCors("CorsPolicy");
 
             //app.UseExceptionHandler(appBuilder =>
             //{
