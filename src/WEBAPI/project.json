@@ -73,7 +73,8 @@
         "portable-net45+win8"
       ]
     },
-    "Microsoft.DotNet.Watcher.Tools": "1.1.0-*"
+    "Microsoft.DotNet.Watcher.Tools": "1.1.0-*",
+    "Newtonsoft.Json":  "9.0.1"
   },
 
   "frameworks": {
