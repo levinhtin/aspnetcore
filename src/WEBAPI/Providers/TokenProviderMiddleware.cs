@@ -110,15 +110,14 @@ namespace WEBAPI.Providers
                 var now = DateTime.UtcNow;
                 var user = await _userManager.FindByEmailAsync(username);
                 var roles = await _userManager.GetRolesAsync(user);
-                string [] roleClaims = identity.Claims.Where(x=>x.Type == ClaimTypes.Role).ToList().Select(x=> x.Value).ToArray();
+                string [] roleClaims = identity.Claims.Select(claim => new { claim.Type, claim.Value }).ToList().Select(x=> x.Value).ToArray();
 
                 // Specifically add the jti (nonce), iat (issued timestamp), and sub (subject/user) claims.
                 // You can add other claims here, if you want:
                 var claims = new Claim[]
                 {
-                    
                     new Claim(JwtRegisteredClaimNames.Sub, username),
-                    new Claim(ClaimTypes.Role, JsonConvert.SerializeObject(roleClaims)),
+                    new Claim("roles", JsonConvert.SerializeObject(roles.ToArray())),
                     new Claim(JwtRegisteredClaimNames.Jti, await _options.NonceGenerator()),
                     new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(now).ToString(), ClaimValueTypes.Integer64)
                 };

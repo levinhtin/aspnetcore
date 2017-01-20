@@ -82,8 +82,10 @@ namespace WEBAPI.Controllers
         }
 
         [HttpGet("claims")]
-        public IActionResult Claims()
+        public async Task<IActionResult> Claims()
         {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var claims = await _userManager.GetClaimsAsync(user);
             return Ok(User.Claims.Select(c =>
                         new
                         {
