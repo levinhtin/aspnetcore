@@ -16,6 +16,7 @@ namespace App.Data.Context
         const string DEFAULT_ADMIN_EMAIL = "levinhtin@gmail.com";
         const string DEFAULT_ADMIN_PASSWORD = "123123";
         const string DEFAULT_ADMINISTRATOR_ROLE = "Administrator";
+        const string DEFAULT_MANAGER_ROLE = "Manager";
 
         public static async void InitializeDatabase(IServiceProvider serviceProvider, bool isProduction)
         {
@@ -88,12 +89,25 @@ namespace App.Data.Context
                 if (await roleManger.FindByNameAsync(DEFAULT_ADMINISTRATOR_ROLE) == null)
                 {
                     // If not create it
-                    var administratorsRole = new ApplicationRole { Name = DEFAULT_ADMINISTRATOR_ROLE };
-                    var result = await roleManger.CreateAsync(administratorsRole);
+                    var administratorRole = new ApplicationRole { Name = DEFAULT_ADMINISTRATOR_ROLE };
+                    var result = await roleManger.CreateAsync(administratorRole);
 
                     // Add the admin user to the new role
                     var adminUser = await userManager.FindByNameAsync(DEFAULT_ADMIN_EMAIL);
                     await userManager.AddToRoleAsync(adminUser, DEFAULT_ADMINISTRATOR_ROLE);
+
+                    // TODO: Gonz introduce correct logging!
+                }
+
+                if (await roleManger.FindByNameAsync(DEFAULT_MANAGER_ROLE) == null)
+                {
+                    // If not create it
+                    var managerRole = new ApplicationRole { Name = DEFAULT_MANAGER_ROLE };
+                    var result = await roleManger.CreateAsync(managerRole);
+
+                    // Add the admin user to the new role
+                    var adminUser = await userManager.FindByNameAsync(DEFAULT_ADMIN_EMAIL);
+                    await userManager.AddToRoleAsync(adminUser, DEFAULT_MANAGER_ROLE);
 
                     // TODO: Gonz introduce correct logging!
                 }
